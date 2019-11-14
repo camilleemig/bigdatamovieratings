@@ -1,9 +1,2 @@
-{% if all_movies_list %}
-    <ul>
-    {% for movie in all_movies_list %}
-        <li><a href="/ratings/{{movie.1}}/">{{movie.0}}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No movies are available.</p>
-{% endif %}
+<a href="/ratings/categories/">Movie Categories</a>
+<a href="/ratings/movies/">All Movies</a>

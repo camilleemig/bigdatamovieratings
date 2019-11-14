@@ -1,0 +1,10 @@
+<h1>{{category}}</h1>
+{% if movies_list %}
+    <ul>
+    {% for movie in movies_list %}
+        <li><a href="/ratings/{{movie.1}}/">{{movie.0}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No categories are available.</p>
+{% endif %}
