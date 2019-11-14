@@ -1,6 +1,6 @@
 from operator import itemgetter
 from math import sqrt
-from . PrepData import PrepData
+from . DataSingleton import DataSingleton
 import time
 
 def find_cosine_similarity(ratings1, ratings2):
@@ -17,8 +17,7 @@ def find_cosine_similarity(ratings1, ratings2):
 
 
 def find_predicted_ratings_for_user(user_id):
-    data = PrepData()
-    data.prep_data()
+    data = DataSingleton()
 
     sorted_users = sorted(data.users_to_ratings.keys())
     test_users_movies = set(data.users_to_ratings[user_id].keys())
