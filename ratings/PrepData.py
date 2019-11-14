@@ -9,7 +9,7 @@ class PrepData:
         self.path_ratings = 'ratings/ml-latest-small/ratings.csv'
         self.movie_rating_thres = 50
         self.user_rating_thres = 50
-        
+
         self.indices_to_movies = {}
         self.movies_to_genres = {}
         self.all_movies = set()
