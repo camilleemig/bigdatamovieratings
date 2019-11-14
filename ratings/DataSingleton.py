@@ -1,5 +1,6 @@
 from . PrepData import PrepData
 
+
 class DataSingleton:
     class __DataSingleton:
         def __init__(self):
@@ -15,8 +16,10 @@ class DataSingleton:
             self.users_to_ratings = prepper.users_to_ratings
             self.users_to_genre_ratings = prepper.users_to_genre_ratings
             self.movie_user_mat_sparse = prepper.movie_user_mat_sparse
+            self.movie_ratings = prepper.movie_ratings
 
     instance = None
+
     def __init__(self):
         if not DataSingleton.instance:
             DataSingleton.instance = DataSingleton.__DataSingleton()

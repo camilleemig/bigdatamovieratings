@@ -12,6 +12,7 @@ class PrepData:
 
         self.indices_to_movies = {}
         self.movies_to_genres = {}
+        self.movie_ratings = {}
         self.all_movies = set()
         self.genres = {}
         self.users_to_ratings = {}
@@ -43,16 +44,21 @@ class PrepData:
         ratings_file = reader(open(self.path_ratings))
         next(ratings_file, None)
         temp_users_to_genre_ratings = {}
+        movie_ratings = {}
         for line in ratings_file:
             # get basic data from the line
             user_id = int(line[0])
             movie_id = int(line[1])
             movie_name = self.indices_to_movies[movie_id]
             rating = float(line[2])
-            # store the rating of this movie
+            # store the rating of this movie IN BOTH DIRECTIONS!
             if user_id not in self.users_to_ratings:
                 self.users_to_ratings[user_id] = {}
             self.users_to_ratings[user_id][movie_name] = rating
+
+            if movie_id not in movie_ratings:
+                movie_ratings[movie_id] = []
+            movie_ratings[movie_id].append(rating)
 
             # store the rating of the movie for the user's genre ratings
             if user_id not in temp_users_to_genre_ratings:
@@ -67,6 +73,7 @@ class PrepData:
             self.users_to_genre_ratings[user] = {}
             for genre, ratings in genres.items():
                 self.users_to_genre_ratings[user][genre] = sum(ratings) / len(ratings)
+        self.movie_ratings = dict((k, sum(l)/len(l)) for k, l in movie_ratings.items())
 
     def prep_movies_data(self):
         """

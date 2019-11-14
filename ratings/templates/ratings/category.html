@@ -1,8 +1,8 @@
-<h1>{{category}}</h1>
+<h1>Top 100 {{category}} Movies</h1>
 {% if movies_list %}
     <ul>
     {% for movie in movies_list %}
-        <li><a href="/ratings/{{movie.1}}/">{{movie.0}}</a></li>
+        <li><a href="/ratings/{{movie.1}}/">{{movie.0}}: {{movie.2}}</a></li>
     {% endfor %}
     </ul>
 {% else %}

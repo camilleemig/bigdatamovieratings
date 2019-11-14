@@ -54,7 +54,8 @@ def category(request, category):
     singleton = DataSingleton()
     movies_set = set(singleton.genres[category])
     movies_list = [(k,v) for v, k in singleton.indices_to_movies.items() if k in movies_set][:100]
-
+    movies_list = sorted([(k, v, singleton.movie_ratings[v]) for k, v in movies_list], key=itemgetter(2), reverse=True)
+    movies_list = movies_list[:100]
     context = {
         'movies_list': movies_list,
         'category': category
