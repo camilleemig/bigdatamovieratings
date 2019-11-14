@@ -11,7 +11,7 @@ from sklearn.neighbors import NearestNeighbors
 # utils import
 from fuzzywuzzy import fuzz
 from operator import itemgetter
-
+from . DataSingleton import DataSingleton
 
 class KnnRecommender:
     """
@@ -27,64 +27,17 @@ class KnnRecommender:
         path_movies: str, movies data file path
         path_ratings: str, ratings data file path
         """
-        self.path_movies = 'ml-latest-small/movies.csv'
-        self.path_ratings = 'ml-latest-small/ratings.csv'
-        self.movie_rating_thres = 50
-        self.user_rating_thres = 50
+
+
         self.model = NearestNeighbors()
         self.model.set_params(**{
             'n_neighbors': 20,
             'algorithm': 'brute',
             'metric': 'cosine',
             'n_jobs': -1})
+        self.dataSingleton = DataSingleton()
 
-    def _prep_data(self):
-        """
-        prepare data for recommender
-        1. movie-user scipy sparse matrix
-        2. hashmap of movie to row index in movie-user scipy sparse matrix
-        """
-        # read data
-        df_movies = pd.read_csv(
-            self.path_movies,
-            usecols=['movieId', 'title'],
-            dtype={'movieId': 'int32', 'title': 'str'})
-        df_ratings = pd.read_csv(
-            self.path_ratings,
-            usecols=['userId', 'movieId', 'rating'],
-            dtype={'userId': 'int32', 'movieId': 'int32', 'rating': 'float32'})
-        # filter data
-        df_movies_cnt = pd.DataFrame(
-            df_ratings.groupby('movieId').size(),
-            columns=['count'])
 
-        popular_movies = list(set(df_movies_cnt.query('count >= @self.movie_rating_thres').index))
-        movies_filter = df_ratings.movieId.isin(popular_movies).values
-
-        df_users_cnt = pd.DataFrame(
-            df_ratings.groupby('userId').size(),
-            columns=['count'])
-        active_users = list(set(df_users_cnt.query('count >= @self.user_rating_thres').index))  # noqa
-        users_filter = df_ratings.userId.isin(active_users).values
-
-        df_ratings_filtered = df_ratings[movies_filter & users_filter]
-
-        # pivot and create movie-user matrix
-        movie_user_mat = df_ratings_filtered.pivot(
-            index='movieId', columns='userId', values='rating').fillna(0)
-        # create mapper from movie title to index
-        movies_to_indicies = {
-            movie: i for i, movie in
-            enumerate(list(df_movies.set_index('movieId').loc[movie_user_mat.index].title))  # noqa
-        }
-        # transform matrix to scipy sparse matrix
-        movie_user_mat_sparse = csr_matrix(movie_user_mat.values)
-
-        # clean up
-        del df_movies, df_movies_cnt, df_users_cnt
-        del df_ratings, df_ratings_filtered, movie_user_mat
-        gc.collect()
-        return movie_user_mat_sparse, movies_to_indicies
 
     def _fuzzy_matching(self, hashmap, fav_movie):
         """
@@ -167,22 +120,22 @@ class KnnRecommender:
         """
         t0 = time.time()
         # get data
-        movie_user_mat_sparse, movies_to_indicies = self._prep_data()
+        movie_user_mat_sparse, movies_to_indices = self.dataSingleton.movie_user_mat_sparse, self.dataSingleton.movies_to_indices
 
         # get recommendations
         raw_recommends = self._inference(
-            self.model, movie_user_mat_sparse, movies_to_indicies,
+            self.model, movie_user_mat_sparse, movies_to_indices,
             fav_movie, n_recommendations)
 
         # print results
-        indicies_to_movies = {v: k for k, v in movies_to_indicies.items()}
+        indices_to_movies = {v: k for k, v in movies_to_indices.items()}
         print('Recommendations for {}:'.format(fav_movie))
         for i, (idx, dist) in enumerate(raw_recommends):
             print('{}: {}, with distance '
-                  'of {}'.format(i + 1, indicies_to_movies[idx], dist))
+                  'of {}'.format(i + 1, indices_to_movies[idx], dist))
         print('It took my system {:.2f}s to get top n movies \n\
                       '.format(time.time() - t0))
 
-if __name__ == '__main__':
-    recommender = KnnRecommender()
-    recommender.make_recommendations("Toy Story", 5)
+# if __name__ == '__main__':
+#     recommender = KnnRecommender()
+#     recommender.make_recommendations("Toy Story", 5)

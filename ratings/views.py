@@ -1,9 +1,10 @@
 from django.shortcuts import render
 # Create your views here.
-from . import MostSimilarUsers
+from . DataSingleton import DataSingleton
 
 def index(request):
-    all_movies_list = MostSimilarUsers.find_predicted_ratings_for_user(1)
+    singleton = DataSingleton()
+    all_movies_list = singleton.all_movies
     context = {
         'all_movies_list': all_movies_list,
     }
