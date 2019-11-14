@@ -1,4 +1,12 @@
 <h1>All Movies</h1>
+<form action="{% url 'movies' %}" method="get">
+    {% if search_placeholder %}
+        <input name="q" type="text" value="{{search_placeholder}}">
+    {% else %}
+        <input name="q" type="text" placeholder="Search...">
+    {% endif %}
+</form>
+
 {% if all_movies_list %}
     <ul>
     {% for movie in all_movies_list %}
