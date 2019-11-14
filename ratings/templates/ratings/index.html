@@ -1,0 +1,9 @@
+{% if all_movies_list %}
+    <ul>
+    {% for movie in all_movies_list %}
+        <li><a href="/ratings/{{ movie }}/">{{movie}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No movies are available.</p>
+{% endif %}

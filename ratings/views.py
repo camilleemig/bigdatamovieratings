@@ -1,9 +1,10 @@
 from django.shortcuts import render
-
 # Create your views here.
-from django.http import HttpResponse
 from . import MostSimilarUsers
 
 def index(request):
-
-    return HttpResponse(MostSimilarUsers.find_predicted_ratings_for_user(1))
+    all_movies_list = MostSimilarUsers.find_predicted_ratings_for_user(1)
+    context = {
+        'all_movies_list': all_movies_list,
+    }
+    return render(request, 'ratings/index.html', context)
