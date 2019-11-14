@@ -25,7 +25,7 @@ SECRET_KEY = '^4j2&6ndt^ej$#oj8$p*hfl9+0d($$wi7wdunq14c3jkyh8+77'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['big-data-movie-recommender.herokuapp.com']
+ALLOWED_HOSTS = ['big-data-movie-recommender.herokuapp.com', 'localhost']
 
 
 # Application definition
