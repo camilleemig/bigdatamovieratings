@@ -6,6 +6,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('movies/', views.movies, name='movies'),
     path('categories/', views.categories, name='categories'),
-    path('<int:movie_id>/', views.movie, name='movie'),
-    path('<str:category>/', views.category, name='category'),
+    path('movies/<int:movie_id>/', views.movie, name='movie'),
+    path('categories/<str:category>/', views.category, name='category'),
 ]

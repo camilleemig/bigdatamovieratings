@@ -1,5 +1,9 @@
-{% if movie %}
-    <p>{{movie}}</p>
-{% else %}
-    <p>Movie was not found.</p>
-{% endif %}
+{% extends 'ratingsbase.html' %}
+
+{% block content %}
+	{% if movie %}
+	    <p>{{movie}}</p>
+	{% else %}
+	    <p>Movie was not found.</p>
+	{% endif %}
+{% endblock %}

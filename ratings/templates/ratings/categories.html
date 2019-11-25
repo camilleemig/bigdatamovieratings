@@ -1,10 +1,14 @@
-<h1>Categories</h1>
-{% if categories_list %}
-    <ul>
-    {% for category in categories_list %}
-        <li><a href="/ratings/{{category}}/">{{category}}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No categories are available.</p>
-{% endif %}
+{% extends 'ratingsbase.html' %}
+
+{% block content %}
+	<h1>Categories</h1>
+	{% if categories_list %}
+	    <ul>
+	    {% for category in categories_list %}
+	        <li><a href="/categories/{{category}}/">{{category}}</a></li>
+	    {% endfor %}
+	    </ul>
+	{% else %}
+	    <p>No categories are available.</p>
+	{% endif %}
+{% endblock %}

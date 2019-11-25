@@ -25,7 +25,7 @@ SECRET_KEY = '^4j2&6ndt^ej$#oj8$p*hfl9+0d($$wi7wdunq14c3jkyh8+77'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['big-data-movie-recommender.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['big-data-movie-recommender.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ratings'
+    'ratings',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,4 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_REDIRECT_URL = '/ratings/'
+LOGOUT_REDIRECT_URL = '/accounts/login'
