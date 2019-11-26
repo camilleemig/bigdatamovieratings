@@ -5,10 +5,14 @@ from operator import itemgetter
 # Create your views here.
 from . DataSingleton import DataSingleton
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def index(request):
     context = {}
     return render(request, 'ratings/index.html', context)
 
+@login_required
 def movies(request):
     singleton = DataSingleton()
     all_movies_list = [(k,v) for v, k in singleton.indices_to_movies.items()]
@@ -34,6 +38,7 @@ def movies(request):
     }
     return render(request, 'ratings/movies.html', context)
 
+@login_required
 def movie(request, movie_id):
     singleton = DataSingleton()
     movie = singleton.indices_to_movies[int(movie_id)]
@@ -42,6 +47,7 @@ def movie(request, movie_id):
     }
     return render(request, 'ratings/movie.html', context)
 
+@login_required
 def categories(request):
     singleton = DataSingleton()
     categories_list = list(singleton.genres)
@@ -50,6 +56,7 @@ def categories(request):
     }
     return render(request, 'ratings/categories.html', context)
 
+@login_required
 def category(request, category):
     singleton = DataSingleton()
     movies_set = set(singleton.genres[category])

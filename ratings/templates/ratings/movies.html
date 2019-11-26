@@ -1,18 +1,16 @@
-<h1>All Movies</h1>
-<form action="{% url 'movies' %}" method="get">
-    {% if search_placeholder %}
-        <input name="q" type="text" value="{{search_placeholder}}">
-    {% else %}
-        <input name="q" type="text" placeholder="Search...">
-    {% endif %}
-</form>
+{% extends 'ratingsbase.html' %}
 
-{% if all_movies_list %}
-    <ul>
-    {% for movie in all_movies_list %}
-        <li><a href="/ratings/{{movie.1}}/">{{movie.0}}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No movies are available.</p>
-{% endif %}
+{% block content %}
+	<main role="main">
+		<h1>All Movies</h1>
+		{% if all_movies_list %}
+		    <ul>
+		    {% for movie in all_movies_list %}
+		        <li><a href="{{movie.1}}/">{{movie.0}}</a></li>
+		    {% endfor %}
+		    </ul>
+		{% else %}
+		    <p>No movies are available.</p>
+		{% endif %}
+	</main>
+{% endblock %}
