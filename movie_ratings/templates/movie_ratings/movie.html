@@ -1,0 +1,30 @@
+{% extends 'ratingsbase.html' %}
+
+{% block content %}
+	{% if movie %}
+	    <h1>{{movie.1}}</h1>
+		{% if movie_rating.rating %}
+			<p>{{ movie_rating.rating }}</p>
+		{% endif %}
+		<form action="rate" method="post">
+			{% csrf_token %}
+			{% for choice in '12345'|make_list %}
+			    <input type="radio" name="choice" id="choice{{ choice }}" value="{{ choice }}">
+			    <label for="choice{{ choice }}">{{ choice }}</label><br>
+			{% endfor %}
+			<input type="submit" value="Vote">
+		</form>
+	{% else %}
+	    <p>Movie was not found.</p>
+	{% endif %}
+	<h1>You might also like these movies</h1>
+	{% for movie in predictions %}
+		    {% if movie.3 %}
+			    </div>
+			    <div class="row mb-3">
+		    {% endif %}
+		    <div class="col-4 movie-grid-col">
+	            <a href="/movies/{{movie.2}}/">{{movie.0}}</a>
+		    </div>
+	    {% endfor %}
+{% endblock %}

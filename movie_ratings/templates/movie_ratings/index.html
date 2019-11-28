@@ -1,0 +1,19 @@
+{% extends 'ratingsbase.html' %}
+
+{% block content %}
+	<h1><a href="/categories/">Movie Categories</a></h1>
+	<h1><a href="/movies/">All Movies</a></h1>
+	<h1>You might like...</h1>
+	<div class="row mb-3">
+	    {% for movie in predictions %}
+		    {% if movie.3 %}
+			    </div>
+			    <div class="row mb-3">
+		    {% endif %}
+		    <div class="col-4 movie-grid-col">
+	            <a href="/movies/{{movie.2}}/">{{movie.0}}</a>
+		    </div>
+	    {% endfor %}
+	</div>
+{% endblock %}
+
