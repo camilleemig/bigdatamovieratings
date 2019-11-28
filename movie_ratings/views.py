@@ -5,7 +5,7 @@ from .models import Rating
 
 # Create your views here.
 from . DataSingleton import DataSingleton
-from . MostSimilarUsers import find_predicted_ratings_for_data
+from . MostSimilarUsers import find_predicted_ratings_for_data, find_predicted_ratings_for_similar_movies
 from . MostSimilarMovies import KnnRecommender
 from django.contrib.auth.decorators import login_required
 
@@ -18,9 +18,16 @@ def index(request):
         predictions = find_predicted_ratings_for_data(data)[:10]
         for i, pred in enumerate(predictions):
             predictions[i] = list(pred) + [singleton.reverse[pred[0]], i % 3 == 0]
+        similar_movies = find_predicted_ratings_for_similar_movies(data)[:10]
+        for i, pred in enumerate(similar_movies):
+            similar_movies[i] = list(pred) + [singleton.reverse[pred[0]], i % 3 == 0]
     else:
         predictions = []
-    context = {"predictions": predictions, 'rated': rated}
+        similar_movies = []
+    ratings = [[singleton.indices_to_movies[r.movie], r.rating, r.movie] for r in rated if r.rating]
+    for i, rating in enumerate(ratings):
+        ratings[i] = rating + [i % 3 == 0]
+    context = {"predictions": predictions, 'ratings': ratings, 'similar_movies': similar_movies}
 
     return render(request, 'movie_ratings/index.html', context)
 
