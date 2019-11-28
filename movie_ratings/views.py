@@ -68,7 +68,7 @@ def movie(request, movie_id):
         movie_rating = Rating(user=request.user, movie=movie_id)
         movie_rating.save()
     rec = KnnRecommender()
-    most_similar = list(rec.make_recommendations(movie[1], 5))
+    most_similar = list(rec.make_recommendations(movie[1]))
     for i, pred in enumerate(most_similar):
         most_similar[i] = [pred, None, singleton.reverse[pred], i % 3 == 0]
     context = {
@@ -111,7 +111,7 @@ def rate(request, movie_id):
     movie_rating.rating = request.POST['choice']
     movie_rating.save()
     rec = KnnRecommender()
-    most_similar = list(rec.make_recommendations(movie[1], 5))
+    most_similar = list(rec.make_recommendations(movie[1]))
     for i, pred in enumerate(most_similar):
         most_similar[i] = [pred, None, singleton.reverse[pred], i % 3 == 0]
     context = {

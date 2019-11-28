@@ -173,7 +173,7 @@ def find_predicted_ratings_for_similar_movies(user_1_data):
     filters = set()
     rec = KnnRecommender()
     for movie in test_users_movies:
-        filters |= set(rec.make_recommendations(movie, 5))
+        filters |= set(rec.make_recommendations(movie))
     possible_movies &= filters
 
     for movie in possible_movies:
