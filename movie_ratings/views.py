@@ -4,27 +4,27 @@ from operator import itemgetter
 from .models import Rating
 
 # Create your views here.
-from . DataSingleton import DataSingleton
+from . MovieRatingData import MovieRatingData
 from . MostSimilarUsers import find_predicted_ratings_for_data, find_predicted_ratings_for_similar_movies
 from . MostSimilarMovies import KnnRecommender
 from django.contrib.auth.decorators import login_required
 
 @login_required
 def index(request):
-    singleton = DataSingleton()
+    singleton = MovieRatingData()
     rated = Rating.objects.filter(user=request.user)
-    data = dict([(singleton.indices_to_movies[r.movie], r.rating) for r in rated if r.rating])
+    data = dict([(singleton.movieId_to_movieName[r.movie], r.rating) for r in rated if r.rating])
     if data:
         predictions = find_predicted_ratings_for_data(data)[:10]
         for i, pred in enumerate(predictions):
-            predictions[i] = list(pred) + [singleton.reverse[pred[0]], i % 3 == 0]
+            predictions[i] = list(pred) + [singleton.movieName_to_movieId[pred[0]], i % 3 == 0]
         similar_movies = find_predicted_ratings_for_similar_movies(data)[:10]
         for i, pred in enumerate(similar_movies):
-            similar_movies[i] = list(pred) + [singleton.reverse[pred[0]], i % 3 == 0]
+            similar_movies[i] = list(pred) + [singleton.movieName_to_movieId[pred[0]], i % 3 == 0]
     else:
         predictions = []
         similar_movies = []
-    ratings = [[singleton.indices_to_movies[r.movie], r.rating, r.movie] for r in rated if r.rating]
+    ratings = [[singleton.movieId_to_movieName[r.movie], r.rating, r.movie] for r in rated if r.rating]
     for i, rating in enumerate(ratings):
         ratings[i] = rating + [i % 3 == 0]
     context = {"predictions": predictions, 'ratings': ratings, 'similar_movies': similar_movies}
@@ -33,8 +33,8 @@ def index(request):
 
 @login_required
 def movies(request):
-    singleton = DataSingleton()
-    all_movies_list = [(k,v) for v, k in singleton.indices_to_movies.items()]
+    singleton = MovieRatingData()
+    all_movies_list = [(k,v) for v, k in singleton.movieId_to_movieName.items()]
     if 'q' in request.GET:
         match_tuple = []
         # get match
@@ -59,8 +59,8 @@ def movies(request):
 
 @login_required
 def movie(request, movie_id):
-    singleton = DataSingleton()
-    movie = [movie_id, singleton.indices_to_movies[int(movie_id)]]
+    singleton = MovieRatingData()
+    movie = [movie_id, singleton.movieId_to_movieName[int(movie_id)]]
 
     try:
         movie_rating = Rating.objects.get(user=request.user, movie=movie_id)
@@ -70,7 +70,7 @@ def movie(request, movie_id):
     rec = KnnRecommender()
     most_similar = list(rec.make_recommendations(movie[1]))
     for i, pred in enumerate(most_similar):
-        most_similar[i] = [pred, None, singleton.reverse[pred], i % 3 == 0]
+        most_similar[i] = [pred, None, singleton.movieName_to_movieId[pred], i % 3 == 0]
     context = {
         'movie': movie,
         'movie_rating': movie_rating,
@@ -80,7 +80,7 @@ def movie(request, movie_id):
 
 @login_required
 def categories(request):
-    singleton = DataSingleton()
+    singleton = MovieRatingData()
     categories_list = list(singleton.genres)
     context = {
         'categories_list': categories_list,
@@ -89,10 +89,10 @@ def categories(request):
 
 @login_required
 def category(request, category):
-    singleton = DataSingleton()
+    singleton = MovieRatingData()
     movies_set = set(singleton.genres[category])
-    movies_list = [(k,v) for v, k in singleton.indices_to_movies.items() if k in movies_set][:100]
-    movies_list = sorted([(k, v, singleton.movie_ratings[v]) for k, v in movies_list], key=itemgetter(2), reverse=True)
+    movies_list = [(singleton.movieId_to_movieName[k], k) for k in movies_set][:100]
+    movies_list = sorted([(k, v, singleton.average_movie_ratings[v]) for k, v in movies_list], key=itemgetter(2), reverse=True)
     movies_list = movies_list[:100]
     context = {
         'movies_list': movies_list,
@@ -102,8 +102,8 @@ def category(request, category):
 
 @login_required
 def rate(request, movie_id):
-    singleton = DataSingleton()
-    movie = [movie_id, singleton.indices_to_movies[int(movie_id)]]
+    singleton = MovieRatingData()
+    movie = [movie_id, singleton.movieId_to_movieName[int(movie_id)]]
     try:
         movie_rating = Rating.objects.get(user=request.user, movie=movie_id)
     except (KeyError, Rating.DoesNotExist):
@@ -113,7 +113,7 @@ def rate(request, movie_id):
     rec = KnnRecommender()
     most_similar = list(rec.make_recommendations(movie[1]))
     for i, pred in enumerate(most_similar):
-        most_similar[i] = [pred, None, singleton.reverse[pred], i % 3 == 0]
+        most_similar[i] = [pred, None, singleton.movieName_to_movieId[pred], i % 3 == 0]
     context = {
         'movie': movie,
         'movie_rating': movie_rating,

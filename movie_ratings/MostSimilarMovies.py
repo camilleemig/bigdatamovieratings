@@ -4,7 +4,7 @@ from sklearn.neighbors import NearestNeighbors
 # utils import
 from fuzzywuzzy import fuzz
 from operator import itemgetter
-from . DataSingleton import DataSingleton
+from . MovieRatingData import MovieRatingData
 
 class KnnRecommender:
     """
@@ -23,8 +23,8 @@ class KnnRecommender:
             'algorithm': 'brute',
             'metric': 'cosine',
             'n_jobs': -1})
-        self.dataSingleton = DataSingleton()
-        data = self.dataSingleton.movie_user_mat_sparse
+        self.data = MovieRatingData()
+        data = self.data.movie_user_mat_sparse
         self.model.fit(data)
 
 
@@ -42,7 +42,7 @@ class KnnRecommender:
         """
         match_tuples = []
         # get match
-        for title, idx in self.dataSingleton.movies_to_indices.items():
+        for title, idx in self.data.movies_to_csr_indices.items():
             ratio = fuzz.ratio(title.lower(), movie.lower())
             if ratio >= 60:
                 match_tuples.append((title, idx, ratio))
@@ -60,7 +60,7 @@ class KnnRecommender:
         ------
         list of top n similar movie recommendations
         """
-        data = self.dataSingleton.movie_user_mat_sparse
+        data = self.data.movie_user_mat_sparse
         movie_idx = self._fuzzy_matching(movie)
 
         distances, indices = self.model.kneighbors(data[movie_idx],  n_neighbors=6)
@@ -80,6 +80,6 @@ class KnnRecommender:
         """
         # get recommendations
         raw_recommends = self._inference(movie)
-        indices_to_movies = {v: k for k, v in self.dataSingleton.movies_to_indices.items()}
+        indices_to_movies = {v: k for k, v in self.data.movies_to_csr_indices.items()}
         movie_names = [indices_to_movies[i[0]] for i in raw_recommends]
         return movie_names

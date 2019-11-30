@@ -1,6 +1,6 @@
 from operator import itemgetter
 from math import sqrt
-from . DataSingleton import DataSingleton
+from . MovieRatingData import MovieRatingData
 from . MostSimilarMovies import KnnRecommender
 
 def find_cosine_similarity(ratings1, ratings2):
@@ -22,7 +22,7 @@ def find_predicted_ratings_for_user(user_id):
     :param user_id:
     :return:
     """
-    data = DataSingleton()
+    data = MovieRatingData()
 
     sorted_users = sorted(data.users_to_ratings.keys())
     test_users_movies = set(data.users_to_ratings[user_id].keys())
@@ -76,7 +76,7 @@ def find_predicted_ratings_for_data(user_1_data):
     :param user_1_data:
     :return:
     """
-    data = DataSingleton()
+    data = MovieRatingData()
 
     sorted_users = sorted(data.users_to_ratings.keys())
     test_users_movies = set(user_1_data.keys())
@@ -134,7 +134,7 @@ def find_predicted_ratings_for_similar_movies(user_1_data):
     :param user_1_data:
     :return:
     """
-    data = DataSingleton()
+    data = MovieRatingData()
 
     sorted_users = sorted(data.users_to_ratings.keys())
     test_users_movies = set(user_1_data.keys())
@@ -190,3 +190,5 @@ def find_predicted_ratings_for_similar_movies(user_1_data):
         predicted = total_sim_rated/total_sim
         predicted_ratings[movie] = test_user_average + predicted
     return sorted(predicted_ratings.items(), key=itemgetter(1), reverse=True)
+
+print(find_predicted_ratings_for_user(1))
