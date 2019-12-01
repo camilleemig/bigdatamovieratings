@@ -17,10 +17,10 @@ def index(request):
     if data:
         predictions = find_predicted_ratings_for_data(data)[:10]
         for i, pred in enumerate(predictions):
-            predictions[i] = list(pred) + [singleton.movieName_to_movieId[pred[0]], i % 3 == 0]
+            predictions[i] = list(pred) + [singleton.movieName_to_movieId[pred[0]], i % 5 == 0]
         similar_movies = find_predicted_ratings_for_similar_movies(data)[:10]
         for i, pred in enumerate(similar_movies):
-            similar_movies[i] = list(pred) + [singleton.movieName_to_movieId[pred[0]], i % 3 == 0]
+            similar_movies[i] = list(pred) + [singleton.movieName_to_movieId[pred[0]], i % 5 == 0]
     else:
         predictions = []
         similar_movies = []
