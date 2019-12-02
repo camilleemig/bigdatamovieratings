@@ -113,7 +113,7 @@ body {
   border-radius: 5px;
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
-  margin-bottom: 20px;
+  margin: 20px;
 }
 .movie-grid-col h4 {
   height: 75%;
