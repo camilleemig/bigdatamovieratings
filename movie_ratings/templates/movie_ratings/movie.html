@@ -1,30 +1,42 @@
 {% extends 'ratingsbase.html' %}
 
 {% block content %}
+<style>
+	ul {
+	  list-style-type: none;
+	}
+</style>
 	{% if movie %}
 	    <h1>{{movie.1}}</h1>
 		{% if movie_rating.rating %}
-			<p>{{ movie_rating.rating }}</p>
+			<h4>Your Current Rating: {{ movie_rating.rating }}</h4>
+			<h4>Change Rating: </h4>
+		{% else %}
+			<h4> Rate this movie: </h4>
 		{% endif %}
-		<form action="rate" method="post">
-			{% csrf_token %}
-			{% for choice in '12345'|make_list %}
-			    <input type="radio" name="choice" id="choice{{ choice }}" value="{{ choice }}">
-			    <label for="choice{{ choice }}">{{ choice }}</label><br>
-			{% endfor %}
-			<input type="submit" value="Vote">
-		</form>
+		<div class="rankingForm">
+			<form action="rate" method="post">
+				{% csrf_token %}
+				{% for choice in '12345'|make_list %}
+					<input type="radio" name="choice" id="choice{{ choice }}" value="{{ choice }}">
+					<label for="choice{{ choice }}">{{ choice }}</label><br>
+				{% endfor %}
+				<input type="submit" value="Rate">
+			</form>
+		</div>
 	{% else %}
 	    <p>Movie was not found.</p>
 	{% endif %}
 	<h1>You might also like these movies</h1>
+	<div class="row justify-content-around mb-3"></div>
 	{% for movie in predictions %}
-		    {% if movie.3 %}
-			    </div>
-			    <div class="row mb-3">
-		    {% endif %}
-		    <div class="col-4 movie-grid-col">
-	            <a href="/movies/{{movie.2}}/">{{movie.0}}</a>
+		{% if movie.3 %}
+			</div>
+			<div class="row justify-content-around mb-3">
+		{% endif %}
+			<div class="col-2 movie-grid-col">
+	            <h4><a href="/movies/{{movie.2}}/">{{movie.0}}</a></h4>
 		    </div>
-	    {% endfor %}
+		{% endfor %}
+	</div>
 {% endblock %}
