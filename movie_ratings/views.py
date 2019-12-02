@@ -26,7 +26,7 @@ def index(request):
         similar_movies = []
     ratings = [[singleton.movieId_to_movieName[r.movie], r.rating, r.movie] for r in rated if r.rating]
     for i, rating in enumerate(ratings):
-        ratings[i] = rating + [i % 3 == 0]
+        ratings[i] = rating + [i % 5 == 0]
     context = {"predictions": predictions, 'ratings': ratings, 'similar_movies': similar_movies}
 
     return render(request, 'movie_ratings/index.html', context)

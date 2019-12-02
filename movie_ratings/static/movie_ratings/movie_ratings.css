@@ -1,5 +1,15 @@
 body {
   font-size: .875rem;
+  background-color: #333333;
+  color: white;
+}
+
+a {
+  color: white;
+}
+
+a:hover {
+  color: #aaaaaa;
 }
 
 .feather {
@@ -84,8 +94,8 @@ body {
   padding-top: .75rem;
   padding-bottom: .75rem;
   font-size: 1rem;
-  background-color: rgba(0, 0, 0, .25);
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+  /*background-color: rgba(0, 0, 0, .25);*/
+  /*box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);*/
 }
 
 .navbar .form-control {
@@ -107,16 +117,17 @@ body {
 }
 
 .movie-grid-col {
-  height: 150px;
-  width: 100px;
-  background-color: rgba(52, 191, 255, 0.445);
+  height: 100px;
+  width: 150px;
+  background-color: #aaaaaa;
   border-radius: 5px;
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
-  margin: 20px;
+  /*margin: 20px;*/
+  overflow: hidden;
 }
 .movie-grid-col h4 {
-  height: 75%;
+  text-overflow: ellipsis;
 }
 
 .movie-grid-col a {

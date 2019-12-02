@@ -14,14 +14,16 @@
 		{% else %}
 			<h4> Rate this movie: </h4>
 		{% endif %}
-		<div class="rankingForm">
-			<form action="rate" method="post">
+		<div class="rankingForm container w-25">
+			<form action="rate" method="post" class="row">
 				{% csrf_token %}
 				{% for choice in '12345'|make_list %}
-					<input type="radio" name="choice" id="choice{{ choice }}" value="{{ choice }}">
-					<label for="choice{{ choice }}">{{ choice }}</label><br>
+					<div class="col">
+						<input type="radio" name="choice" id="choice{{ choice }}" value="{{ choice }}" required>
+						<label for="choice{{ choice }}">{{ choice }}</label><br>
+					</div>
 				{% endfor %}
-				<input type="submit" value="Rate">
+				<input type="submit" value="Rate" class="btn btn-light">
 			</form>
 		</div>
 	{% else %}

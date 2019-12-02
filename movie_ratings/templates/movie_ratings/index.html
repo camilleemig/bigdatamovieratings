@@ -6,9 +6,7 @@
 		font-family: Arial, Helvetica, sans-serif;
 	}
 </style>
-	<h1><a href="/categories/">Movie Categories</a></h1>
-	<h1><a href="/movies/">All Movies</a></h1>
-	<h1>Based on movies you like, you might like...</h1>
+	<h5>Based on movies you like, you might like...</h5>
 	<div class="row justify-content-around mb-3">
 	    {% for movie in similar_movies %}
 		    {% if movie.3 %}
@@ -20,7 +18,7 @@
 		    </div>
 	    {% endfor %}
 	</div>
-	<h1>Users who liked movies that you liked also like...</h1>
+	<h5>Users who liked movies that you liked also like...</h5>
 	<div class="row justify-content-around mb-3">
 	    {% for movie in predictions %}
 		    {% if movie.3 %}
@@ -32,7 +30,7 @@
 		    </div>
 	    {% endfor %}
 	</div>
-	<h1>Your rated movies</h1>
+	<h5>Your rated movies</h5>
 	<div class="row mb-3">
 	    {% for movie in ratings %}
 		    {% if movie.3 %}
