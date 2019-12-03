@@ -29,16 +29,19 @@
 	{% else %}
 	    <p>Movie was not found.</p>
 	{% endif %}
-	<h1>You might also like these movies</h1>
-	<div class="row justify-content-around mb-3"></div>
-	{% for movie in predictions %}
-		{% if movie.3 %}
-			</div>
-			<div class="row justify-content-around mb-3">
-		{% endif %}
-			<div class="col-2 movie-grid-col">
-	            <h4><a href="/movies/{{movie.2}}/">{{movie.0}}</a></h4>
-		    </div>
+	<div class="container">
+		<h5>More like this</h5>
+		<div class="row justify-content-around mb-3"></div>
+		{% for movie in predictions %}
+			{% if movie.3 %}
+				</div>
+				<div class="row justify-content-around mb-3">
+			{% endif %}
+				<div class="col-2 movie-grid-col">
+		            <h4><a href="/movies/{{movie.2}}/">{{movie.0}}</a></h4>
+			    </div>
 		{% endfor %}
+		</div>
 	</div>
 {% endblock %}
+`

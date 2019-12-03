@@ -46,15 +46,18 @@ def movies(request):
         match_tuple = sorted(match_tuple, key=itemgetter(2), reverse=True)
         all_movies_list = [(i[0], i[1]) for i in match_tuple]
         search_placeholder = request.GET['q']
-        print(search_placeholder)
+        context = {
+            'all_movies_list': all_movies_list,
+            'search_placeholder': search_placeholder
+        }
     else:
-        all_movies_list = all_movies_list[:100]
-        search_placeholder = None
+        movies_dict = {c: [(m, singleton.average_movie_ratings[m]) for m in k] for c, k in singleton.genres.items()}
+        movies_dict = {c: sorted(v, key=itemgetter(1), reverse=True)[:5] for c, v in movies_dict.items()}
+        movies_dict = {c: [(m[0], singleton.movieId_to_movieName[m[0]]) for m in v] for c, v in movies_dict.items()}
 
-    context = {
-        'all_movies_list': all_movies_list,
-        'search_placeholder': search_placeholder
-    }
+        context = {
+            'movies_dict': movies_dict
+        }
     return render(request, 'movie_ratings/movies.html', context)
 
 @login_required

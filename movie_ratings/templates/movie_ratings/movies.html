@@ -16,6 +16,18 @@
 			</ul>
 		</div>
 	{% else %}
-	    <p>No movies are available.</p>
+	    {% for category, movies in movies_dict.items %}
+		    <h5><a href="/categories/{{category}}/">{{ category }}</a></h5>
+		    <div class="container">
+		        <div class="row justify-content-around mb-3">
+			        {% for movie in movies %}
+				        <div class="col-2 movie-grid-col">
+				            <h4><a href="/movies/{{movie.0}}/">{{movie.1}}</a></h4>
+					    </div>
+			        {% endfor %}
+		        </div>
+		    </div>
+
+		{% endfor %}
 	{% endif %}
 {% endblock %}
